@@ -1,0 +1,145 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*INICIO CSS -VERIFICAR*/
+body {
+    background: #EFEFEF;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 3rem 1rem 3rem;
+    align-items: center;
+    border-bottom: solid #AAA 0.5px;
+}
+
+header img {
+    height: 51px;
+}
+
+header div {
+    display: flex;
+    align-items: center;
+}
+
+header h2 {
+    color: #D13239;
+    font-size: 32px;
+    font-weight: 600;
+    height: fit-content;
+}
+
+hr {
+    height: 50px;
+    margin: 0 8px;
+}
+
+header button {
+    border: none;
+    background-color: #D13239;
+    color: #EFEFEF;
+    padding: 1rem;
+    margin-right: 8px;
+    border-radius: 8px;
+}
+
+header button:hover {
+    background-color: #bd2f36;
+}
+
+header span {
+    font-size: 1rem;
+}
+
+header a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #1D1D1B;
+}
+
+h1 {
+    font-size: 48px;
+}
+
+#principal {
+    display: flex;
+    padding: 1rem 3rem 0rem 3rem;
+    justify-content: space-between;
+}
+
+#principal-textos {
+    max-width: 44%;
+    align-content: center;
+}
+
+#principal-textos p {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    color: #808285;
+    font-size: 24px;
+}
+
+button {
+    border: none;
+    background-color: #D13239;
+    color: #EFEFEF;
+    padding: 1rem;
+    margin-right: 8px;
+    border-radius: 8px;
+}
+
+#inicio {
+    height: 500px;
+}
+
+#iniciar {
+    background-color: #00A5A2;
+}
+
+#como-funciona {
+    background-color: #C4D1D6;
+    color: #1D1D1B;
+}

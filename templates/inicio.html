@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <div>
+            <img src="{{url_for('static',filename='imagens/icone.png')}}" alt="LOGOTIPO UNIVESP">
+            <hr><h2>Simulados</h2>
+        </div>
+        <div>
+            <button>ENTRAR</button>
+            <!-- <span>Não possui cadastro?<br><a href="#">Clique aqui</a></span> -->
+        </div>
+    </header>
+    <div>
+        <div id="principal">
+            <div id="principal-textos">
+                <h1>Treine para o vestibular da UNIVESP</h1>
+                <p>Resolva simulados e teste seus conhecimentos com provas anteriores</p>
+                <button id="iniciar">INICIAR SIMULADO</button>
+                <button id="como-funciona">COMO FUNCIONA</button>
+            </div>
+            
+            <img id="inicio" src="{{url_for('static',filename='imagens/inicio.png')}}" alt="" srcset="">
+        </div>
+        
+        <div>
+            <p>+100 questões disponíveis</p>
+            <p>Foco total da UNIVESP</p>
+            <p>+100% gratuito</p>
+        </div>
+    </div>
+       
+</body>
+</html>
