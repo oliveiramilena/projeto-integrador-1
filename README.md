@@ -13,6 +13,9 @@ Criar e entrar no ambiente virtual
 Instalar as dependências do projeto
 > pip install -r requirements.txt
 
+Iniciar os serviços do projeto
+> docker compose up -d
+
 Criar um arquivo .env com as variáveis de ambiente, seguindo o .env.example
 > cp .env.example .env
 
