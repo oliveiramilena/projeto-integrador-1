@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/reset.css')}}">
     <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
     <title>Document</title>
 </head>
@@ -13,7 +14,7 @@
             <hr><h2>Simulados</h2>
         </div>
         <div>
-            <button>ENTRAR</button>
+            <a class="btn btn-red" href="{{url_for('auth.login')}}">ENTRAR</a>
             <!-- <span>Não possui cadastro?<br><a href="#">Clique aqui</a></span> -->
         </div>
     </header>
@@ -22,8 +23,8 @@
             <div id="principal-textos">
                 <h1>Treine para o vestibular da UNIVESP</h1>
                 <p>Resolva simulados e teste seus conhecimentos com provas anteriores</p>
-                <button id="iniciar">INICIAR SIMULADO</button>
-                <button id="como-funciona">COMO FUNCIONA</button>
+                <button class="btn" id="iniciar">INICIAR SIMULADO</button>
+                <button class="btn" id="como-funciona">COMO FUNCIONA</button>
             </div>
             
             <img id="inicio" src="{{url_for('static',filename='imagens/inicio.png')}}" alt="" srcset="">
