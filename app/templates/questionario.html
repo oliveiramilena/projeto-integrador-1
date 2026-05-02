@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .quiz-wrapper {
+    max-width: 760px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .progress-info {
+    font-size: 0.95rem;
+    color: #555;
+  }
+
+  .timer {
+    font-size: 1.05rem;
+    font-weight: bold;
+    color: #c0392b;
+    background: #fdecea;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    letter-spacing: 0.05rem;
+  }
+
+  .timer.warning {
+    animation: piscar 1s step-start infinite;
+  }
+
+  @keyframes piscar {
+    50% { opacity: 0.35; }
+  }
+
+  .progress-bar-bg {
+    background: #e0e0e0;
+    border-radius: 8px;
+    height: 10px;
+    margin-bottom: 1.75rem;
+  }
+
+  .progress-bar-fill {
+    background: #2980b9;
+    height: 10px;
+    border-radius: 8px;
+    transition: width 0.4s ease;
+  }
+
+  .question-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .question-meta {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 0.75rem;
+  }
+
+  .question-statement {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: #222;
+  }
+
+  .options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .option-item input[type="radio"] {
+    display: none;
+  }
+
+  .option-item label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .option-item label:hover {
+    border-color: #2980b9;
+    background: #f0f7fd;
+  }
+
+  .option-item input[type="radio"]:checked ~ label {
+    border-color: #2980b9;
+    background: #e8f4fc;
+  }
+
+  .option-letter {
+    font-weight: bold;
+    color: #2980b9;
+    min-width: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .quiz-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .btn-acao {
+    border: none;
+    padding: 0.8rem 2.2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #fff;
+    background: #2980b9;
+    transition: background 0.2s;
+  }
+
+  .btn-acao:hover {
+    background: #1f6391;
+  }
+
+  .btn-acao:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+
+  .btn-acao.enviar {
+    background: #27ae60;
+  }
+
+  .btn-acao.enviar:hover {
+    background: #1e8449;
+  }
+
+  .resultado {
+    display: none;
+    text-align: center;
+    padding: 2.5rem 1rem;
+  }
+
+  .resultado h2 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .resultado p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-reiniciar {
+    background: #2980b9;
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.8rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .btn-reiniciar:hover {
+    background: #1f6391;
+  }
+</style>
+
+<div class="quiz-wrapper" id="quiz-wrapper">
+  <div class="quiz-header">
+    <span class="progress-info">
+      Questão <strong id="num-atual">1</strong> de <strong id="num-total">—</strong>
+    </span>
+    <span class="timer" id="timer">⏱ 60:00</span>
+  </div>
+
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="barra-progresso" style="width: 0%"></div>
+  </div>
+
+  <div class="question-card" id="question-card">
+    <p class="question-meta" id="question-meta"></p>
+    <p class="question-statement" id="question-statement">Carregando questão...</p>
+    <ul class="options-list" id="options-list"></ul>
+  </div>
+
+  <div class="quiz-actions">
+    <button class="btn-acao" id="btn-acao" disabled onclick="avancar()">Próxima →</button>
+  </div>
+</div>
+
+<div class="resultado" id="resultado">
+  <h2 id="resultado-titulo"></h2>
+  <p id="resultado-desc"></p>
+  <a href="/questionario"><button class="btn-reiniciar">Tentar novamente</button></a>
+</div>
+
+<script>
+  const questoesServidor = {{ questions | default([]) | tojson }};
+
+  const questoesDemo = [
+    {
+      statement: "Qual é o resultado de 2³ + √16?",
+      option_a: "10", option_b: "12", option_c: "14", option_d: "16", option_e: "20",
+      correct_answer: "B", subject: "Matemática", source: "ENEM", year: 2022
+    },
+    {
+      statement: "Um objeto em queda livre parte do repouso. Qual distância percorre após 2 s? (g = 10 m/s²)",
+      option_a: "5 m", option_b: "10 m", option_c: "20 m", option_d: "40 m", option_e: "80 m",
+      correct_answer: "C", subject: "Física", source: "FUVEST", year: 2021
+    },
+    {
+      statement: "Qual é a fórmula molecular da glicose?",
+      option_a: "C₆H₁₂O₅", option_b: "C₆H₁₂O₆", option_c: "C₁₂H₂₂O₁₁", option_d: "C₂H₅OH", option_e: "CH₄O",
+      correct_answer: "B", subject: "Química", source: "ENEM", year: 2020
+    },
+    {
+      statement: "A Independência do Brasil foi proclamada em:",
+      option_a: "7 de setembro de 1889", option_b: "15 de novembro de 1889",
+      option_c: "7 de setembro de 1822", option_d: "22 de abril de 1500", option_e: "13 de maio de 1888",
+      correct_answer: "C", subject: "História", source: "UNICAMP", year: 2023
+    },
+    {
+      statement: "Qual processo é responsável pela produção de ATP na presença de oxigênio?",
+      option_a: "Fotossíntese", option_b: "Fermentação", option_c: "Glicólise anaeróbica",
+      option_d: "Respiração celular aeróbica", option_e: "Osmose",
+      correct_answer: "D", subject: "Biologia", source: "ENEM", year: 2022
+    },
+    {
+      statement: "Qual figura de linguagem está presente em 'A vida é uma viagem'?",
+      option_a: "Metonímia", option_b: "Hipérbole", option_c: "Metáfora",
+      option_d: "Ironia", option_e: "Antítese",
+      correct_answer: "C", subject: "Português", source: "FUVEST", year: 2021
+    },
+    {
+      statement: "Qual é o valor de sen(30°)?",
+      option_a: "√3/2", option_b: "√2/2", option_c: "1", option_d: "1/2", option_e: "0",
+      correct_answer: "D", subject: "Matemática", source: "ENEM", year: 2019
+    },
+    {
+      statement: "Qual é o principal gás responsável pelo efeito estufa antropogênico?",
+      option_a: "Oxigênio (O₂)", option_b: "Nitrogênio (N₂)", option_c: "Dióxido de carbono (CO₂)",
+      option_d: "Argônio (Ar)", option_e: "Hidrogênio (H₂)",
+      correct_answer: "C", subject: "Geografia", source: "ENEM", year: 2023
+    },
+    {
+      statement: "A Lei Áurea, que aboliu a escravidão no Brasil, foi assinada em:",
+      option_a: "13 de maio de 1888", option_b: "15 de novembro de 1889",
+      option_c: "7 de setembro de 1822", option_d: "1 de janeiro de 1863", option_e: "28 de setembro de 1871",
+      correct_answer: "A", subject: "História", source: "UNICAMP", year: 2022
+    },
+    {
+      statement: "Um condutor com resistência de 10 Ω é submetido a 220 V. Qual é a corrente elétrica?",
+      option_a: "2 A", option_b: "10 A", option_c: "22 A", option_d: "220 A", option_e: "2200 A",
+      correct_answer: "C", subject: "Física", source: "FUVEST", year: 2020
+    }
+  ];
+
+  const questoes = questoesServidor.length > 0 ? questoesServidor : questoesDemo;
+
+  const LETRAS = ["A", "B", "C", "D", "E"];
+  const CAMPOS = ["option_a", "option_b", "option_c", "option_d", "option_e"];
+  const DURACAO_SEG = 60 * 60;
+
+  let indice = 0;
+  let respostas = {};
+  let segundosRestantes = DURACAO_SEG;
+  let intervaloTimer;
+
+  function gabarito(q) {
+    const v = q.correct_answer;
+    return (typeof v === "object" && v !== null) ? (v.value || v.name) : String(v);
+  }
+
+  function renderizarQuestao() {
+    const q = questoes[indice];
+    const total = questoes.length;
+
+    document.getElementById("num-atual").textContent = indice + 1;
+    document.getElementById("num-total").textContent = total;
+    document.getElementById("barra-progresso").style.width =
+      (indice / total * 100).toFixed(1) + "%";
+
+    const meta = [q.subject, q.source, q.year].filter(Boolean).join(" · ");
+    document.getElementById("question-meta").textContent = meta;
+    document.getElementById("question-statement").textContent = q.statement;
+
+    const lista = document.getElementById("options-list");
+    lista.innerHTML = "";
+    LETRAS.forEach((letra, i) => {
+      const texto = q[CAMPOS[i]];
+      if (!texto) return;
+
+      const item = document.createElement("li");
+      item.className = "option-item";
+
+      const id = `opcao-${letra}`;
+      const input = document.createElement("input");
+      input.type = "radio";
+      input.name = "resposta";
+      input.value = letra;
+      input.id = id;
+      if (respostas[indice] === letra) input.checked = true;
+      input.addEventListener("change", aoSelecionar);
+
+      const label = document.createElement("label");
+      label.htmlFor = id;
+      label.innerHTML = `<span class="option-letter">${letra})</span> ${texto}`;
+
+      item.appendChild(input);
+      item.appendChild(label);
+      lista.appendChild(item);
+    });
+
+    const btn = document.getElementById("btn-acao");
+    const ehUltima = indice === total - 1;
+    btn.textContent = ehUltima ? "Enviar" : "Próxima →";
+    btn.className = "btn-acao" + (ehUltima ? " enviar" : "");
+    btn.disabled = !(indice in respostas);
+  }
+
+  function aoSelecionar() {
+    const selecionada = document.querySelector('input[name="resposta"]:checked');
+    respostas[indice] = selecionada ? selecionada.value : null;
+    document.getElementById("btn-acao").disabled = !selecionada;
+  }
+
+  function avancar() {
+    if (!(indice in respostas)) return;
+
+    if (indice < questoes.length - 1) {
+      indice++;
+      renderizarQuestao();
+    } else {
+      encerrar();
+    }
+  }
+
+  async function encerrar() {
+    clearInterval(intervaloTimer);
+
+    if (questoesServidor.length > 0) {
+      const respostasPorId = {};
+      questoes.forEach((q, i) => {
+        if (i in respostas) respostasPorId[String(q.id)] = respostas[i];
+      });
+
+      try {
+        const resp = await fetch("/questionario", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ respostas: respostasPorId }),
+        });
+        const dados = await resp.json();
+        mostrarResultado(dados.acertos, dados.total);
+      } catch {
+        mostrarResultado(0, questoes.length);
+      }
+    } else {
+      let acertos = 0;
+      questoes.forEach((q, i) => {
+        if (respostas[i] === gabarito(q)) acertos++;
+      });
+      mostrarResultado(acertos, questoes.length);
+    }
+  }
+
+  function mostrarResultado(acertos, total) {
+    const pct = Math.round(acertos / total * 100);
+    document.getElementById("quiz-wrapper").style.display = "none";
+    const resultado = document.getElementById("resultado");
+    resultado.style.display = "block";
+    document.getElementById("resultado-titulo").textContent =
+      `Você acertou ${acertos} de ${total} questões (${pct}%)`;
+    document.getElementById("resultado-desc").textContent =
+      pct >= 60
+        ? "Bom desempenho! Continue praticando."
+        : "Continue estudando, você consegue melhorar!";
+  }
+
+  function formatarTempo(seg) {
+    const m = Math.floor(seg / 60).toString().padStart(2, "0");
+    const s = (seg % 60).toString().padStart(2, "0");
+    return `⏱ ${m}:${s}`;
+  }
+
+  function iniciarTimer() {
+    const el = document.getElementById("timer");
+    intervaloTimer = setInterval(() => {
+      segundosRestantes--;
+      el.textContent = formatarTempo(segundosRestantes);
+      if (segundosRestantes <= 300) el.classList.add("warning");
+      if (segundosRestantes <= 0) encerrar();
+    }, 1000);
+  }
+
+  renderizarQuestao();
+  iniciarTimer();
+</script>
+{% endblock %}
