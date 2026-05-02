@@ -1,29 +1,22 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{url_for('static',filename='css/style.css')}}"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/reset.css')}}">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
     <title>Simulados UNIVESP</title>
-  </head>
-  <body>
+</head>
+<body>
     <header>
-      <div>
-        <img
-          src="{{url_for('static',filename='imagens/icone.png')}}"
-          alt="LOGOTIPO UNIVESP"
-        />
-        <hr />
-        <h2>Simulados</h2>
-      </div>
-      <div>
-        <button>ENTRAR</button>
-        <!-- <span>Não possui cadastro?<br><a href="#">Clique aqui</a></span> -->
-      </div>
+        <div>
+            <img src="{{url_for('static',filename='imagens/icone.png')}}" alt="LOGOTIPO UNIVESP">
+            <hr><h2>Simulados</h2>
+        </div>
+        <div>
+            <a class="btn btn-red" href="{{url_for('auth.login')}}">ENTRAR</a>
+        </div>
     </header>
     <div>{% block content %} {% endblock %}</div>
-  </body>
+</body>
 </html>

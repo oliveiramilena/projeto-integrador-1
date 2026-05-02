@@ -1,41 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/reset.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
-    <title>Document</title>
-</head>
-<body>
-    <header>
-        <div>
-            <img src="{{url_for('static',filename='imagens/icone.png')}}" alt="LOGOTIPO UNIVESP">
-            <hr><h2>Simulados</h2>
+{% extends "base.html" %} 
+{% block content %}
+<div>
+    <div id="principal">
+        <div id="principal-textos">
+            <h1>Treine para o <br> vestibular da <span style="color: #D13239; font-weight: 550;">UNIVESP</span></h1>
+            <p>Resolva simulados e teste seus conhecimentos com provas anteriores</p>
+            <button class="btn" id="iniciar">Iniciar simulado → </button>
+            <button class="btn" id="como-funciona">Como funciona?</button>
         </div>
-        <div>
-            <a class="btn btn-red" href="{{url_for('auth.login')}}">ENTRAR</a>
-            <!-- <span>Não possui cadastro?<br><a href="#">Clique aqui</a></span> -->
-        </div>
-    </header>
-    <div>
-        <div id="principal">
-            <div id="principal-textos">
-                <h1>Treine para o vestibular da UNIVESP</h1>
-                <p>Resolva simulados e teste seus conhecimentos com provas anteriores</p>
-                <button class="btn" id="iniciar">INICIAR SIMULADO</button>
-                <button class="btn" id="como-funciona">COMO FUNCIONA</button>
-            </div>
-            
             <img id="inicio" src="{{url_for('static',filename='imagens/inicio.png')}}" alt="" srcset="">
-        </div>
-        
-        <div>
-            <p>+100 questões disponíveis</p>
-            <p>Foco total da UNIVESP</p>
-            <p>+100% gratuito</p>
-        </div>
+</div>
+<div class="cards">
+    <div class="item">
+        <img src="{{url_for('static',filename='imagens/questoes.png')}}" alt="">
+        <p><span class="item-titulo">+200</span> questões disponíveis</p>
     </div>
-       
-</body>
-</html>
+<div class="item">
+    <img src="{{url_for('static',filename='imagens/universidade.png')}}" alt="">
+    <p><span class="item-titulo">UNIVESP</span>Foco total</p>
+</div>
+<div class="item">
+    <img id="" src="{{url_for('static',filename='imagens/gratuito.png')}}" alt="">
+    <p><span class="item-titulo">+100%</span> gratuito</p>
+</div>
+    </div>
+</div>
+{% endblock %}
