@@ -13,3 +13,4 @@ class Config:
         password=os.getenv("DB_PASSWORD", "postgres"),
         database=os.getenv("DB_NAME", "pi_database"),
     )
+    SECRET_KEY = os.getenv("SECRET_KEY", "secret")
