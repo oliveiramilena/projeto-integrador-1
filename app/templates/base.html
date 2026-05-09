@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +9,26 @@
 </head>
 <body>
     <header>
-        <div>
+        <div class="header-brand">
             <img src="{{url_for('static',filename='imagens/icone.png')}}" alt="LOGOTIPO UNIVESP">
             <hr><h2>Simulados</h2>
         </div>
+        {% if current_user.is_authenticated %}
+        <nav class="header-nav">
+            <a href="{{url_for('home.questionario')}}">Simulado</a>
+            <a href="/historico">Histórico</a>
+            <a href="/desempenho">Desempenho</a>
+        </nav>
+        <div class="header-user">
+            <span class="user-name">{{ current_user.name }}</span>
+            <a class="btn btn-outline" href="{{url_for('auth.logout')}}">Sair</a>
+        </div>
+        {% else %}
         <div>
             <a class="btn btn-red" href="{{url_for('auth.login')}}">ENTRAR</a>
         </div>
+        {% endif %}
     </header>
-    <div>{% block content %} {% endblock %}</div>
+    {% block content %} {% endblock %}
 </body>
 </html>

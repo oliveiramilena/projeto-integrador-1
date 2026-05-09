@@ -253,3 +253,145 @@ input.form-att:focus {
     margin-top: 10px;
     transition: background 0.3s ease;
 }
+
+/* Header nav (usuário logado) */
+.header-brand {
+    display: flex;
+    align-items: center;
+}
+
+.header-nav {
+    display: flex;
+    gap: 2rem;
+}
+
+.header-nav a {
+    color: #1D1D1B;
+    font-weight: 500;
+    padding: 0.25rem 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.header-nav a:hover {
+    border-bottom-color: #D13239;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-name {
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.btn-outline {
+    border: 1.5px solid #D13239;
+    color: #D13239;
+    background: transparent;
+    padding: 0.4rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-outline:hover {
+    background: #D13239;
+    color: #fff;
+}
+
+/* Dashboard */
+.dashboard {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 3rem;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    font-size: 2rem;
+    color: #1D1D1B;
+}
+
+.dashboard-header p {
+    color: #808285;
+    margin-top: 0.25rem;
+    font-size: 1rem;
+}
+
+.dashboard-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.dashboard-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    text-decoration: none;
+    color: #1D1D1B;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.card-body {
+    flex: 1;
+}
+
+.card-body h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #1D1D1B;
+}
+
+.card-body p {
+    font-size: 0.9rem;
+    color: #808285;
+    margin: 0;
+}
+
+.card-arrow {
+    font-size: 1.5rem;
+    color: #ccc;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.dashboard-card:hover .card-arrow {
+    color: #D13239;
+}
+
+.card-simulado:hover {
+    border-left: 4px solid #00A5A2;
+}
+
+.card-historico:hover {
+    border-left: 4px solid #D13239;
+}
+
+.card-desempenho:hover {
+    border-left: 4px solid #f0a500;
+}

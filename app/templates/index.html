@@ -1,9 +1,39 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Bem-vindo {{name}}, comece seu simulado agora mesmo!</h1>
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Olá, {{ current_user.name.split()[0] }}!</h1>
+        <p>O que você quer fazer hoje?</p>
+    </div>
 
-<div>
-    <a class="btn btn-red" href="/simulado" class="btn btn-primary">Iniciar Simulado</a>
+    <div class="dashboard-cards">
+        <a class="dashboard-card card-simulado" href="{{url_for('home.questionario')}}">
+            <div class="card-icon">&#127891;</div>
+            <div class="card-body">
+                <h3>Iniciar Simulado</h3>
+                <p>Responda questões de vestibular da UNIVESP com tempo e quantidade personalizados</p>
+            </div>
+            <span class="card-arrow">&#8594;</span>
+        </a>
+
+        <a class="dashboard-card card-historico" href="/historico">
+            <div class="card-icon">&#128203;</div>
+            <div class="card-body">
+                <h3>Histórico</h3>
+                <p>Veja todos os simulados que você já realizou e suas pontuações</p>
+            </div>
+            <span class="card-arrow">&#8594;</span>
+        </a>
+
+        <a class="dashboard-card card-desempenho" href="/desempenho">
+            <div class="card-icon">&#128200;</div>
+            <div class="card-body">
+                <h3>Desempenho</h3>
+                <p>Analise sua evolução por matéria e identifique pontos de melhoria</p>
+            </div>
+            <span class="card-arrow">&#8594;</span>
+        </a>
+    </div>
 </div>
 {% endblock %}
