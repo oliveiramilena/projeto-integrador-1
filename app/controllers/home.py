@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from flask_login import current_user, login_required
+from sqlalchemy import func
 
 from app.ext.database import db
 from app.models.question import Question
@@ -94,3 +95,43 @@ def historico():
         .all()
     )
     return render_template("historico.html", tentativas=tentativas)
+
+
+@home.route("/desempenho")
+@login_required
+def desempenho():
+    resumo = db.session.query(
+        func.count(ExamAttempt.id).label("total_simulados"),
+        func.sum(ExamAttempt.total_questions).label("total_questoes"),
+        func.avg(
+            ExamAttempt.correct_answers * 100.0 / ExamAttempt.total_questions
+        ).label("media_aproveitamento"),
+    ).filter(ExamAttempt.user_id == current_user.id).first()
+
+    por_materia = db.session.query(
+        Question.subject,
+        func.count(ExamAttemptAnswer.id).label("total"),
+        func.sum(
+            db.case((ExamAttemptAnswer.is_correct, 1), else_=0)
+        ).label("acertos"),
+    ).join(Question, ExamAttemptAnswer.question_id == Question.id
+    ).join(ExamAttempt, ExamAttemptAnswer.attempt_id == ExamAttempt.id
+    ).filter(ExamAttempt.user_id == current_user.id
+    ).group_by(Question.subject
+    ).order_by(func.count(ExamAttemptAnswer.id).desc()
+    ).all()
+
+    evolucao = (
+        ExamAttempt.query
+        .filter_by(user_id=current_user.id)
+        .order_by(ExamAttempt.created_at.asc())
+        .limit(10)
+        .all()
+    )
+
+    return render_template(
+        "desempenho.html",
+        resumo=resumo,
+        por_materia=por_materia,
+        evolucao=evolucao,
+    )

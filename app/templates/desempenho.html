@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Desempenho</h1>
+        <p>Análise do seu aproveitamento por matéria e evolução ao longo do tempo.</p>
+    </div>
+
+    {% if resumo.total_simulados %}
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="stat-value">{{ resumo.total_simulados }}</span>
+            <span class="stat-label">Simulados realizados</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ resumo.total_questoes }}</span>
+            <span class="stat-label">Questões respondidas</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{{ "%.0f"|format(resumo.media_aproveitamento) }}%</span>
+            <span class="stat-label">Aproveitamento médio</span>
+        </div>
+    </div>
+
+    {% if por_materia %}
+    <h2 class="section-title">Por Matéria</h2>
+    <table class="historico-table">
+        <thead>
+            <tr>
+                <th>Matéria</th>
+                <th>Questões</th>
+                <th>Acertos</th>
+                <th>Aproveitamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in por_materia %}
+            {% set pct = (s.acertos / s.total * 100) | round | int %}
+            <tr>
+                <td>{{ s.subject }}</td>
+                <td>{{ s.total }}</td>
+                <td>{{ s.acertos }}</td>
+                <td>
+                    <div class="score-bar-wrap">
+                        <div class="score-bar {% if pct >= 70 %}score-bar--good{% elif pct >= 50 %}score-bar--mid{% else %}score-bar--bad{% endif %}"
+                             style="width: {{ pct }}%;"></div>
+                        <span class="score-label">{{ pct }}%</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    {% if evolucao | length > 1 %}
+    <h2 class="section-title">Evolução Recente</h2>
+    <div class="evolucao-wrap">
+        {% for t in evolucao %}
+        {% set pct = t.score_pct %}
+        <div class="evolucao-item">
+            <div class="evolucao-bar-col">
+                <div class="evolucao-bar {% if pct >= 70 %}score-bar--good{% elif pct >= 50 %}score-bar--mid{% else %}score-bar--bad{% endif %}"
+                     style="height: {{ pct }}%;"></div>
+            </div>
+            <span class="evolucao-pct">{{ pct }}%</span>
+            <span class="evolucao-data">{{ t.created_at.strftime('%d/%m') }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="historico-vazio">
+        <p>Você ainda não realizou nenhum simulado.</p>
+        <a class="btn btn-primary" href="{{ url_for('home.questionario') }}">Iniciar primeiro simulado</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
