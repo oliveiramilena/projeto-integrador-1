@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Histórico de Simulados</h1>
+        <p>Todos os seus simulados realizados, do mais recente ao mais antigo.</p>
+    </div>
+
+    {% if tentativas %}
+    <table class="historico-table">
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Questões</th>
+                <th>Acertos</th>
+                <th>Aproveitamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in tentativas %}
+            <tr>
+                <td>{{ t.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                <td>{{ t.total_questions }}</td>
+                <td>{{ t.correct_answers }}</td>
+                <td>
+                    <div class="score-bar-wrap">
+                        <div class="score-bar" style="width: {{ t.score_pct }}%;"
+                             data-pct="{{ t.score_pct }}"></div>
+                        <span class="score-label">{{ t.score_pct }}%</span>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="historico-vazio">
+        <p>Você ainda não realizou nenhum simulado.</p>
+        <a class="btn btn-primary" href="{{ url_for('home.questionario') }}">Iniciar primeiro simulado</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -395,3 +395,74 @@ input.form-att:focus {
 .card-desempenho:hover {
     border-left: 4px solid #f0a500;
 }
+
+.historico-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.historico-table th,
+.historico-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.historico-table thead {
+    background: #f5f5f5;
+}
+
+.historico-table th {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.historico-table tbody tr {
+    border-top: 1px solid #f0f0f0;
+}
+
+.historico-table tbody tr:hover {
+    background: #fafafa;
+}
+
+.score-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.score-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: #00A5A2;
+    min-width: 4px;
+    max-width: 120px;
+}
+
+.score-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+    min-width: 36px;
+}
+
+.historico-vazio {
+    background: #fff;
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    color: #808285;
+}
+
+.historico-vazio p {
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}

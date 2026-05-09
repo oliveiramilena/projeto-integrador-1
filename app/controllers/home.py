@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, request, jsonify
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 from app.ext.database import db
 from app.models.question import Question
+from app.models.exam_attempt import ExamAttempt, ExamAttemptAnswer
 
 home = Blueprint("home", __name__)
 
@@ -10,7 +11,7 @@ home = Blueprint("home", __name__)
 @home.route("/")
 def inicio():
     if current_user.is_authenticated:
-        return render_template("index.html", name=current_user.name)  # type: ignore
+        return render_template("index.html")
 
     return render_template("inicio.html")
 
@@ -39,6 +40,25 @@ def questionario():
                 "acertou": acertou,
             })
 
+        if current_user.is_authenticated:
+            attempt = ExamAttempt(
+                user_id=current_user.id,
+                total_questions=len(questoes),
+                correct_answers=acertos,
+            )
+            db.session.add(attempt)
+            db.session.flush()
+
+            for detalhe in detalhes:
+                db.session.add(ExamAttemptAnswer(
+                    attempt_id=attempt.id,
+                    question_id=detalhe["id"],
+                    given_answer=detalhe["sua_resposta"],
+                    is_correct=detalhe["acertou"],
+                ))
+
+            db.session.commit()
+
         return jsonify({
             "acertos": acertos,
             "total": len(questoes),
@@ -62,3 +82,15 @@ def questionario():
         for q in questoes
     ]
     return render_template("questionario.html", questions=questoes_dict)
+
+
+@home.route("/historico")
+@login_required
+def historico():
+    tentativas = (
+        ExamAttempt.query
+        .filter_by(user_id=current_user.id)
+        .order_by(ExamAttempt.created_at.desc())
+        .all()
+    )
+    return render_template("historico.html", tentativas=tentativas)
