@@ -14,3 +14,5 @@ class Config:
         database=os.getenv("DB_NAME", "pi_database"),
     )
     SECRET_KEY = os.getenv("SECRET_KEY", "secret")
+    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")

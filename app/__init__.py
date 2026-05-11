@@ -2,6 +2,7 @@ from flask import Flask
 from app import controllers
 from app.config import Config
 from app.ext import database, login_manager
+from app.ext import oauth
 import app.models  # noqa: F401
 
 
@@ -10,6 +11,7 @@ def create_app():
     app.config.from_object(Config)
     database.init_app(app)
     login_manager.init_app(app)
+    oauth.init_app(app)
     controllers.init_app(app)
 
     return app

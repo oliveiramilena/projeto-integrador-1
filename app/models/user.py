@@ -12,7 +12,8 @@ class User(db.Model, UserMixin):
     )
     name = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
-    password = db.Column(db.String(256), nullable=False)
+    password = db.Column(db.String(256), nullable=True)
+    google_id = db.Column(db.String(128), unique=True, nullable=True)
 
     def __repr__(self):
         return f"<User {self.email}>"
