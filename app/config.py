@@ -2,6 +2,9 @@ import os
 
 
 def make_connection_string(host, port, username, password, database):
+    url = os.getenv("POSTGRES_URL")
+    if url:
+        return url
     return f"postgresql://{username}:{password}@{host}:{port}/{database}"
 
 
@@ -16,3 +19,4 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "secret")
     GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
     GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+    GOOGLE_CALLBACK_URL = os.getenv("GOOGLE_CALLBACK_URL", "http://localhost:5000/callback")
