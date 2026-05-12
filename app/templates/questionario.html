@@ -208,7 +208,7 @@
 <div class="resultado" id="resultado">
   <h2 id="resultado-titulo"></h2>
   <p id="resultado-desc"></p>
-  <a href="/questionario"><button class="btn-reiniciar">Tentar novamente</button></a>
+  <a href="/questionario"><button class="btn-reiniciar">Novo Simulado</button></a>
 </div>
 
 <script>
@@ -276,7 +276,7 @@
 
   const LETRAS = ["A", "B", "C", "D", "E"];
   const CAMPOS = ["option_a", "option_b", "option_c", "option_d", "option_e"];
-  const DURACAO_SEG = 60 * 60;
+  const DURACAO_SEG = {{ tempo_min | default(60) }} * 60;
 
   let indice = 0;
   let respostas = {};
@@ -362,7 +362,7 @@
       });
 
       try {
-        const resp = await fetch("/questionario", {
+        const resp = await fetch("/questionario/responder", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ respostas: respostasPorId }),

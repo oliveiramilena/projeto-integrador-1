@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  .config-wrapper {
+    max-width: 640px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
+  }
+
+  .config-wrapper h1 {
+    font-size: 1.6rem;
+    color: #1a1a2e;
+    margin-bottom: 0.4rem;
+  }
+
+  .config-wrapper > p {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 0.97rem;
+  }
+
+  .config-section {
+    margin-bottom: 1.8rem;
+  }
+
+  .config-section label.section-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Chips para quantidade e tempo */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips input[type="radio"] {
+    display: none;
+  }
+
+  .chips label {
+    padding: 0.45rem 1.1rem;
+    border: 2px solid #d0d0d0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    color: #444;
+    transition: border-color 0.18s, background 0.18s, color 0.18s;
+    user-select: none;
+  }
+
+  .chips label:hover {
+    border-color: #2980b9;
+    color: #2980b9;
+  }
+
+  .chips input[type="radio"]:checked + label {
+    border-color: #2980b9;
+    background: #2980b9;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  /* Checkboxes de matérias */
+  .materias-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .materias-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  .materia-item input[type="checkbox"] {
+    display: none;
+  }
+
+  .materia-item label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.55rem 0.9rem;
+    border: 2px solid #d0d0d0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    color: #444;
+    transition: border-color 0.18s, background 0.18s, color 0.18s;
+    user-select: none;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .materia-item label:hover {
+    border-color: #2980b9;
+    color: #2980b9;
+  }
+
+  .materia-item input[type="checkbox"]:checked + label {
+    border-color: #2980b9;
+    background: #e8f4fc;
+    color: #1a5f84;
+    font-weight: 600;
+  }
+
+  .materia-item label .materia-text {
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .materia-item label .check-icon {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #aaa;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: border-color 0.18s, background 0.18s;
+  }
+
+  .materia-item input[type="checkbox"]:checked + label .check-icon {
+    border-color: #2980b9;
+    background: #2980b9;
+  }
+
+  .materia-item input[type="checkbox"]:checked + label .check-icon::after {
+    content: "✓";
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+  }
+
+  .selecionar-todas {
+    font-size: 0.85rem;
+    color: #2980b9;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-bottom: 0.6rem;
+    text-decoration: underline;
+  }
+
+  .selecionar-todas:hover {
+    color: #1f6391;
+  }
+
+  .aviso-materias {
+    font-size: 0.82rem;
+    color: #e67e22;
+    margin-top: 0.4rem;
+    display: none;
+  }
+
+  .btn-iniciar {
+    width: 100%;
+    padding: 0.9rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .btn-iniciar:hover {
+    background: #1e8449;
+  }
+
+  .btn-iniciar:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+  }
+</style>
+
+<div class="config-wrapper">
+  <h1>Configurar Simulado</h1>
+  <p>Escolha as opções abaixo para personalizar sua prova.</p>
+
+  <form id="form-config" action="/questionario/iniciar" method="get">
+
+    <div class="config-section">
+      <label class="section-label">Número de questões</label>
+      <div class="chips" id="chips-quantidade">
+        {% for n in [5, 10, 15, 20, 30] %}
+        <input type="radio" name="quantidade" id="q{{ n }}" value="{{ n }}"
+               {% if n == 10 %}checked{% endif %}>
+        <label for="q{{ n }}">{{ n }}</label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="config-section">
+      <label class="section-label">Tempo máximo</label>
+      <div class="chips" id="chips-tempo">
+        {% for t, label in [(15, "15 min"), (30, "30 min"), (45, "45 min"), (60, "1 h"), (90, "1h30"), (120, "2 h")] %}
+        <input type="radio" name="tempo" id="t{{ t }}" value="{{ t }}"
+               {% if t == 60 %}checked{% endif %}>
+        <label for="t{{ t }}">{{ label }}</label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="config-section">
+      <label class="section-label">Matérias</label>
+      <button type="button" class="selecionar-todas" id="btn-todas">Selecionar todas</button>
+      {% if materias %}
+      <div class="materias-grid" id="materias-grid">
+        {% for m in materias %}
+        <div class="materia-item">
+          <input type="checkbox" name="materias" id="m-{{ loop.index }}" value="{{ m }}" checked>
+          <label for="m-{{ loop.index }}">
+            <span class="check-icon"></span>
+            <span class="materia-text">{{ m }}</span>
+          </label>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p style="color:#999;font-size:0.9rem;">Nenhuma matéria disponível no banco de dados.</p>
+      {% endif %}
+      <p class="aviso-materias" id="aviso-materias">Selecione pelo menos uma matéria.</p>
+    </div>
+
+    <button type="submit" class="btn-iniciar" id="btn-iniciar">Iniciar Simulado →</button>
+  </form>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[name="materias"]');
+  const btnTodas = document.getElementById("btn-todas");
+  const aviso = document.getElementById("aviso-materias");
+  const btnIniciar = document.getElementById("btn-iniciar");
+
+  function atualizarEstado() {
+    const algumaMarcada = [...checkboxes].some(c => c.checked);
+    const todasMarcadas = [...checkboxes].every(c => c.checked);
+    aviso.style.display = algumaMarcada ? "none" : "block";
+    btnIniciar.disabled = !algumaMarcada;
+    btnTodas.textContent = todasMarcadas ? "Desmarcar todas" : "Selecionar todas";
+  }
+
+  checkboxes.forEach(c => c.addEventListener("change", atualizarEstado));
+
+  btnTodas.addEventListener("click", () => {
+    const todasMarcadas = [...checkboxes].every(c => c.checked);
+    checkboxes.forEach(c => { c.checked = !todasMarcadas; });
+    atualizarEstado();
+  });
+
+  document.getElementById("form-config").addEventListener("submit", e => {
+    const algumaMarcada = [...checkboxes].some(c => c.checked);
+    if (!algumaMarcada) {
+      e.preventDefault();
+      aviso.style.display = "block";
+    }
+  });
+
+  atualizarEstado();
+</script>
+{% endblock %}

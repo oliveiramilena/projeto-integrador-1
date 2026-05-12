@@ -25,6 +25,16 @@ header div {
     align-items: center;
 }
 
+.a-home {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+
 header h2 {
     color: #D13239;
     font-size: 32px;
@@ -202,7 +212,7 @@ h1 {
 h2 {
     color: #333;
     font-family: 'Montserrat', sans-serif;
-    margin-bottom: 25px;
+    /* margin-bottom: 25px;  */
     font-weight: 600;
 }
 

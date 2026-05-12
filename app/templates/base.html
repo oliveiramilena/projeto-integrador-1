@@ -10,8 +10,10 @@
 <body>
     <header>
         <div class="header-brand">
-            <img src="{{url_for('static',filename='imagens/icone.png')}}" alt="LOGOTIPO UNIVESP">
-            <hr><h2>Simulados</h2>
+            <a href="/" class="a-home">
+                <img src="{{url_for('static',filename='imagens/icone.png')}}" alt="LOGOTIPO UNIVESP">
+                <hr><h2>Simulados</h2>
+            </a>
         </div>
         {% if current_user.is_authenticated %}
         <div class="header-user">
@@ -23,8 +25,8 @@
         </button>
         <nav class="header-nav" id="header-nav">
             <a href="{{url_for('home.questionario')}}">Simulado</a>
-            <a href="/historico">Histórico</a>
-            <a href="/desempenho">Desempenho</a>
+            <a href="{{url_for('home.historico')}}">Histórico</a>
+            <a href="{{url_for('home.desempenho')}}">Desempenho</a>
         </nav>
         {% else %}
         <div>

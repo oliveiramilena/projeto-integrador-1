@@ -17,56 +17,28 @@ def inicio():
     return render_template("inicio.html")
 
 
-@home.route("/questionario", methods=["GET", "POST"])
+@home.route("/questionario", methods=["GET"])
 def questionario():
-    if request.method == "POST":
-        dados = request.get_json(silent=True) or {}
-        respostas = dados.get("respostas", {})
+    materias = db.session.query(Question.subject).distinct().order_by(Question.subject).all()
+    materias = [m[0] for m in materias]
+    return render_template("questionario_config.html", materias=materias)
 
-        ids = [int(k) for k in respostas if k.isdigit()]
-        questoes = Question.query.filter(Question.id.in_(ids)).all()
 
-        acertos = 0
-        detalhes = []
-        for q in questoes:
-            sua_resposta = respostas.get(str(q.id))
-            gabarito = q.correct_answer.value
-            acertou = sua_resposta == gabarito
-            if acertou:
-                acertos += 1
-            detalhes.append({
-                "id": q.id,
-                "sua_resposta": sua_resposta,
-                "gabarito": gabarito,
-                "acertou": acertou,
-            })
+@home.route("/questionario/iniciar", methods=["GET"])
+def questionario_iniciar():
+    materias_sel = request.args.getlist("materias")
+    quantidade = request.args.get("quantidade", 10, type=int)
+    tempo_min = request.args.get("tempo", 60, type=int)
 
-        if current_user.is_authenticated:
-            attempt = ExamAttempt(
-                user_id=current_user.id,
-                total_questions=len(questoes),
-                correct_answers=acertos,
-            )
-            db.session.add(attempt)
-            db.session.flush()
+    quantidade = max(1, min(quantidade, 100))
+    tempo_min = max(1, min(tempo_min, 240))
 
-            for detalhe in detalhes:
-                db.session.add(ExamAttemptAnswer(
-                    attempt_id=attempt.id,
-                    question_id=detalhe["id"],
-                    given_answer=detalhe["sua_resposta"],
-                    is_correct=detalhe["acertou"],
-                ))
+    query = Question.query
+    if materias_sel:
+        query = query.filter(Question.subject.in_(materias_sel))
 
-            db.session.commit()
+    questoes = query.order_by(db.func.random()).limit(quantidade).all()
 
-        return jsonify({
-            "acertos": acertos,
-            "total": len(questoes),
-            "detalhes": detalhes,
-        })
-
-    questoes = Question.query.order_by(db.func.random()).all()
     questoes_dict = [
         {
             "id": q.id,
@@ -82,7 +54,56 @@ def questionario():
         }
         for q in questoes
     ]
-    return render_template("questionario.html", questions=questoes_dict)
+    return render_template("questionario.html", questions=questoes_dict, tempo_min=tempo_min)
+
+
+@home.route("/questionario/responder", methods=["POST"])
+def questionario_responder():
+    dados = request.get_json(silent=True) or {}
+    respostas = dados.get("respostas", {})
+
+    ids = [int(k) for k in respostas if k.isdigit()]
+    questoes = Question.query.filter(Question.id.in_(ids)).all()
+
+    acertos = 0
+    detalhes = []
+    for q in questoes:
+        sua_resposta = respostas.get(str(q.id))
+        gabarito = q.correct_answer.value
+        acertou = sua_resposta == gabarito
+        if acertou:
+            acertos += 1
+        detalhes.append({
+            "id": q.id,
+            "sua_resposta": sua_resposta,
+            "gabarito": gabarito,
+            "acertou": acertou,
+        })
+
+    if current_user.is_authenticated:
+        attempt = ExamAttempt(
+            user_id=current_user.id, # type: ignore
+            total_questions=len(questoes), # type: ignore
+            correct_answers=acertos, # type: ignore
+        )
+        db.session.add(attempt)
+        db.session.flush()
+
+        for detalhe in detalhes:
+            db.session.add(ExamAttemptAnswer(
+                attempt_id=attempt.id, # type: ignore
+                question_id=detalhe["id"], # type: ignore
+                given_answer=detalhe["sua_resposta"], # type: ignore
+                is_correct=detalhe["acertou"], # type: ignore
+            ))
+
+        db.session.commit()
+
+    return jsonify({
+        "acertos": acertos,
+        "total": len(questoes),
+        "detalhes": detalhes,
+    })
 
 
 @home.route("/historico")
