@@ -47,7 +47,7 @@ header button {
 }
 
 header button:hover {
-    background-color: #bd2f36;
+    background-color: #f1efef;
 }
 
 header span {
@@ -593,4 +593,213 @@ input.form-att:focus {
 .evolucao-data {
     font-size: 0.7rem;
     color: #aaa;
+}
+
+/* RESPONSIVIDADE */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+    margin-left: auto;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #1D1D1B;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 768px) {
+    header {
+        padding: 0.75rem 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .header-nav {
+        display: none;
+        flex-direction: column;
+        gap: 0;
+        width: 100%;
+        border-top: 1px solid #eee;
+        padding-top: 0.5rem;
+        order: 10;
+    }
+
+    .header-nav.open {
+        display: flex;
+    }
+
+    .header-nav a {
+        padding: 0.75rem 0.25rem;
+        border-bottom: 1px solid #f0f0f0;
+        border-bottom-color: transparent;
+    }
+
+    .header-nav a:hover {
+        border-bottom-color: transparent;
+        color: #D13239;
+    }
+
+    .header-user {
+        gap: 0.5rem;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    /* Hero section */
+    #principal {
+        flex-direction: column;
+        padding: 1.25rem 1rem;
+        gap: 1rem;
+    }
+
+    #principal-textos {
+        max-width: 100%;
+    }
+
+    #principal-textos h1 {
+        font-size: 1.75rem;
+    }
+
+    #inicio {
+        display: none;
+    }
+
+    /* Cards informativos */
+    .cards {
+        flex-direction: column;
+        max-width: 92%;
+        padding: 15px;
+        gap: 0.75rem;
+    }
+
+    .item {
+        justify-content: flex-start;
+    }
+
+    .item:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 0.75rem;
+    }
+
+    /* Dashboard */
+    .dashboard {
+        padding: 0 1rem;
+        margin: 1.5rem auto;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .dashboard-card {
+        padding: 1.1rem 1.25rem;
+        gap: 1rem;
+    }
+
+    /* Stats */
+    .stats-row {
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        flex: 1 1 calc(50% - 0.5rem);
+        min-width: 0;
+    }
+
+    /* Tabelas responsivas */
+    .historico-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        white-space: nowrap;
+    }
+
+    /* Evolução */
+    .evolucao-wrap {
+        padding: 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Login */
+    .container {
+        margin: 1.5rem auto;
+        padding: 1.5rem;
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 480px) {
+    header img {
+        height: 38px;
+    }
+
+    header h2 {
+        font-size: 1.2rem;
+    }
+
+    hr {
+        height: 28px;
+        margin: 0 5px;
+    }
+
+    #principal-textos h1 {
+        font-size: 1.5rem;
+    }
+
+    .cards {
+        max-width: 96%;
+    }
+
+    .stat-card {
+        flex: 1 1 100%;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.25rem;
+    }
+
+    .card-icon {
+        font-size: 1.75rem;
+        width: 44px;
+    }
+
+    .card-body h3 {
+        font-size: 1rem;
+    }
+
+    .card-body p {
+        font-size: 0.82rem;
+    }
+
+    .btn-outline {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.82rem;
+    }
+
+    .historico-table th,
+    .historico-table td {
+        padding: 0.75rem 0.9rem;
+        font-size: 0.85rem;
+    }
 }
