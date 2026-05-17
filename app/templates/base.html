@@ -16,18 +16,18 @@
             </a>
         </div>
         {% if current_user.is_authenticated %}
-        <div class="header-user">
-            <span class="user-name">{{ current_user.name }}</span>
-            <a class="btn btn-outline" href="{{url_for('auth.logout')}}">Sair</a>
-        </div>
-        <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
         <nav class="header-nav" id="header-nav">
             <a href="{{url_for('home.questionario')}}">Simulado</a>
             <a href="{{url_for('home.historico')}}">Histórico</a>
             <a href="{{url_for('home.desempenho')}}">Desempenho</a>
         </nav>
+        <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="header-user">
+            <span class="user-name">{{ current_user.name }}</span>
+            <a class="btn btn-outline" href="{{url_for('auth.logout')}}">Sair</a>
+        </div>
         {% else %}
         <div>
             <a class="btn btn-red" href="{{url_for('auth.login')}}">ENTRAR</a>
@@ -46,6 +46,15 @@
             });
         })();
     </script>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
     {% block content %} {% endblock %}
 </body>
 </html>

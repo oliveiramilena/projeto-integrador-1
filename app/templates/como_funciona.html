@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="dashboard" style="max-width: 760px;">
+    <div class="dashboard-header">
+        <h1>Como funciona?</h1>
+        <p>Tudo que você precisa saber para aproveitar ao máximo a plataforma</p>
+    </div>
+
+    <div class="ajuda-steps">
+        <div class="ajuda-step">
+            <div class="ajuda-step-num">1</div>
+            <div class="ajuda-step-body">
+                <h3>Crie sua conta</h3>
+                <p>Acesse a plataforma e entre com sua conta Google. O login é gratuito e leva menos de um minuto. Seus dados de desempenho ficam salvos para você acompanhar sua evolução ao longo do tempo.</p>
+            </div>
+        </div>
+
+        <div class="ajuda-step">
+            <div class="ajuda-step-num">2</div>
+            <div class="ajuda-step-body">
+                <h3>Configure o simulado</h3>
+                <p>Antes de iniciar, você escolhe:</p>
+                <ul class="ajuda-list">
+                    <li><strong>Matérias</strong> — filtre por uma ou mais disciplinas (ex.: Matemática, Português, Física).</li>
+                    <li><strong>Quantidade de questões</strong> — de 1 a 100 questões por simulado.</li>
+                    <li><strong>Tempo limite</strong> — de 1 a 240 minutos. O cronômetro começa assim que o simulado é iniciado.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ajuda-step">
+            <div class="ajuda-step-num">3</div>
+            <div class="ajuda-step-body">
+                <h3>Responda as questões</h3>
+                <p>As questões são selecionadas aleatoriamente do banco de dados com mais de 200 provas anteriores da UNIVESP. Cada questão é de múltipla escolha (A–E). Você pode navegar entre elas livremente antes de finalizar.</p>
+                <p style="margin-top:0.5rem;">Ao acabar o tempo ou clicar em <strong>Finalizar</strong>, o simulado é encerrado e suas respostas são enviadas.</p>
+            </div>
+        </div>
+
+        <div class="ajuda-step">
+            <div class="ajuda-step-num">4</div>
+            <div class="ajuda-step-body">
+                <h3>Veja o resultado</h3>
+                <p>Ao terminar, você recebe imediatamente o gabarito com o número de acertos e o detalhamento de cada questão — sua resposta versus a correta.</p>
+            </div>
+        </div>
+
+        <div class="ajuda-step">
+            <div class="ajuda-step-num">5</div>
+            <div class="ajuda-step-body">
+                <h3>Acompanhe seu desempenho</h3>
+                <p>Na área logada você tem acesso a:</p>
+                <ul class="ajuda-list">
+                    <li><strong>Histórico</strong> — lista de todos os simulados realizados com data, quantidade de questões e aproveitamento.</li>
+                    <li><strong>Desempenho</strong> — painel com média geral de acertos, evolução ao longo do tempo e aproveitamento por matéria.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="ajuda-cta">
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('home.questionario') }}" class="btn" style="background:#00A5A2; text-decoration:none;">Iniciar simulado →</a>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}" class="btn btn-red" style="text-decoration:none;">Entrar e começar</a>
+        {% endif %}
+        <a href="{{ url_for('home.inicio') }}" style="color:#808285; font-size:0.9rem; text-decoration:none;">← Voltar ao início</a>
+    </div>
+</div>
+
+<style>
+.ajuda-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.ajuda-step {
+    display: flex;
+    gap: 1.25rem;
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    align-items: flex-start;
+}
+
+.ajuda-step-num {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 50%;
+    background: #D13239;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ajuda-step-body h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1D1D1B;
+    margin-bottom: 0.4rem;
+}
+
+.ajuda-step-body p {
+    color: #555;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.ajuda-list {
+    margin: 0.5rem 0 0 1.1rem;
+    padding: 0;
+    color: #555;
+    font-size: 0.92rem;
+    line-height: 1.8;
+}
+
+.ajuda-cta {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+    .ajuda-step {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1.1rem 1.25rem;
+    }
+}
+</style>
+{% endblock %}

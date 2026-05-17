@@ -5,8 +5,8 @@
         <div id="principal-textos">
             <h1>Treine para o <br> vestibular da <span style="color: #D13239; font-weight: 550;">UNIVESP</span></h1>
             <p>Resolva simulados e teste seus conhecimentos com provas anteriores</p>
-            <button class="btn" id="iniciar">Iniciar simulado → </button>
-            <button class="btn" id="como-funciona">Como funciona?</button>
+            <a href="{{ url_for('home.questionario')}}" class="btn" id="iniciar">Iniciar simulado → </a >
+            <a href="{{ url_for('home.como_funciona')}}" class="btn" id="como-funciona">Como funciona?</a>
         </div>
             <img id="inicio" src="{{url_for('static',filename='imagens/inicio.png')}}" alt="" srcset="">
 </div>

@@ -116,6 +116,7 @@ h1 {
 
 #iniciar {
     background-color: #00A5A2;
+    text-decoration: none;
 }
 
 #iniciar:hover {
@@ -639,6 +640,7 @@ input.form-att:focus {
 
     .hamburger {
         display: flex;
+        margin-left: auto;
     }
 
     .header-nav {
@@ -812,4 +814,35 @@ input.form-att:focus {
         padding: 0.75rem 0.9rem;
         font-size: 0.85rem;
     }
+}
+
+.flash-messages {
+    max-width: 700px;
+    margin: 1rem auto 0;
+    padding: 0 1rem;
+}
+
+.flash {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.flash-warning {
+    background-color: #fff3cd;
+    color: #7d5c00;
+    border: 1px solid #ffc107;
+}
+
+.flash-danger {
+    background-color: #f8d7da;
+    color: #842029;
+    border: 1px solid #f5c2c7;
+}
+
+.flash-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    border: 1px solid #badbcc;
 }

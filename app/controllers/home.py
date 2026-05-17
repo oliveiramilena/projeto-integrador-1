@@ -18,6 +18,7 @@ def inicio():
 
 
 @home.route("/questionario", methods=["GET"])
+@login_required
 def questionario():
     materias = db.session.query(Question.subject).distinct().order_by(Question.subject).all()
     materias = [m[0] for m in materias]
@@ -25,6 +26,7 @@ def questionario():
 
 
 @home.route("/questionario/iniciar", methods=["GET"])
+@login_required
 def questionario_iniciar():
     materias_sel = request.args.getlist("materias")
     quantidade = request.args.get("quantidade", 10, type=int)
@@ -58,6 +60,7 @@ def questionario_iniciar():
 
 
 @home.route("/questionario/responder", methods=["POST"])
+@login_required
 def questionario_responder():
     dados = request.get_json(silent=True) or {}
     respostas = dados.get("respostas", {})
@@ -104,6 +107,11 @@ def questionario_responder():
         "total": len(questoes),
         "detalhes": detalhes,
     })
+
+
+@home.route("/como-funciona")
+def como_funciona():
+    return render_template("como_funciona.html")
 
 
 @home.route("/historico")
